@@ -4,7 +4,7 @@ import { AuthContext } from "react-oauth2-code-pkce"
 const API_BASE_URL = "http://localhost:8081/api";
 
 function App() {
-  const { token, tokenData, logIn, logOut, isAuthenticated } = useContext(AuthContext);
+  const { token, tokenData, logIn, logOut } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [editingMessage, setEditingMessage] = useState(null);
@@ -13,6 +13,43 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const registerUser = async () => {
+      try {
+        await fetch(`${API_BASE_URL}/users/register`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (error) {
+        console.error('Error registering user:', error);
+      }
+    };
+
+    const fetchMessages = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(`${API_BASE_URL}/messages`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setMessages(data);
+        } else {
+          setError("Failed to fetch messages");
+        }
+      } catch (error) {
+        setError("Error fetching messages: " + error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (token) {
       console.log("Token available " + token);
       registerUser();
@@ -24,37 +61,6 @@ function App() {
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json'
   });
-
-  const registerUser = async () => {
-    try {
-      await fetch(`${API_BASE_URL}/users/register`, {
-        method: 'POST',
-        headers: getAuthHeaders()
-      });
-    } catch (error) {
-      console.error('Error registering user:', error);
-    }
-  };
-
-  const fetchMessages = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch(`${API_BASE_URL}/messages`, {
-        headers: getAuthHeaders()
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data);
-      } else {
-        setError("Failed to fetch messages");
-      }
-    } catch (error) {
-      setError("Error fetching messages: " + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const createMessage = async () => {
     if (!newMessage.trim()) return;
