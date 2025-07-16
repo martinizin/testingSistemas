@@ -9,6 +9,9 @@
 **Estado Final**: ✅ **TODOS LOS ERRORES RESUELTOS**
 
 ---
+
+<img width="1360" height="656" alt="image" src="https://github.com/user-attachments/assets/aaf4161b-f4ee-4a50-957f-c7510b0f32f4" />
+
 <img width="1360" height="649" alt="image" src="https://github.com/user-attachments/assets/f617a124-a552-43ad-8c5b-8cca90c66728" />
 
 <img width="1344" height="656" alt="image" src="https://github.com/user-attachments/assets/858c55ab-a1ad-4b58-848b-2a16a5d3ea97" />
